@@ -26,7 +26,7 @@ $(function(){
 	$('#inputFile').change(function(){
 		// 画像ファイル（JPEGまたはPNG）でない場合は，先に進まない。
 		file = $(this).prop('files')[0];
-		if (file.type != 'image/jpeg' && file.type != 'image/png'){
+		if (file.type != 'image/jpeg' && file.type != 'image/png' && file.type != 'image/gif'){
 			file = null;
 			blob = null;
 			return;
