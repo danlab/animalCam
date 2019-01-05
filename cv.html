@@ -77,11 +77,12 @@ $(function(){
 		})
 		.done(function(data){
 			// 成功時の処理
-			output.innerHTML += "<p>" + JSON.stringify(data);
+			console.log(JSON.stringify(data));
+			// output.innerHTML += "<p>" + JSON.stringify(data);
 			var p = data.predictions[0]['probability'];
 			if(p > 0){
 				p *= 1000;
-				q = Math.floor(p);
+				q = Math.floor(p + 0.5);
 				q /= 10;
 				alert(data.predictions[0]['tagName'] + "（確信度：" + q + "％）");
 			}
