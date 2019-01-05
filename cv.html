@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>あにまるカメラ</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+<body>
+<h1>あにまるカメラ</h1>
+<input id="inputFile" name="file" type="file" accept="image/*">
+<canvas id="photo"></canvas>
+<button id="submit" hidden>送信</button>
+<p id="answer">画像ファイルを選択してください。</p>
+<script>
+var output = document.getElementById("answer");
+var file = null;
+var blob = null;
+$(function(){
+	// ファイルが選択されたときの処理
+	$('input[type=file]').change(function(){
+		// 画像ファイル（JPEGまたはPNG）でない場合は，先に進まない。
+		file = $(this).prop('files')[0];
+		if (file.type != 'image/jpeg' && file.type != 'image/png'){
+			file = null;
+			blob = null;
+			return;
+		}
+
+		// 送信ボタンの出現
+		document.getElementById('submit').hidden = false;
+		output.innerHTML = "この写真を送信してください。";
+
+		var img = new Image();
+		var reader = new FileReader();
+		reader.onload = function(e){
+			img.onload = function(){
+				// 読み込んだ画像ファイルを画面に表示する
+				var canvas = document.getElementById('photo');
+				canvas.width = 640;
+				canvas.height = 480;
+				var ctx = canvas.getContext('2d');
+				ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+
+				// blob形式のデータを作成する（CustomVision送信用）
+				var base64 = canvas.toDataURL('image/jpeg');
+				var bin = atob(base64.split('base64,')[1]);
+				var len = bin.length;
+				var barr = new Uint8Array(len);
+				for(var i = 0; i < len; i++){
+					barr[i] = bin.charCodeAt(i);
+				}
+				blob = new Blob([barr], {type: 'image/jpeg'});
+			}
+			img.src = e.target.result;
+		}
+		reader.readAsDataURL(file);
+	});
+
+	// 送信ボタンが押されたときの処理
+	$('#submit').click(function(){
+		$.ajax({
+			url: "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/d92e3104-583b-4137-8c63-f9cac2404949/image?iterationId=54dac16d-4d69-403a-bde5-d850a9189f56",
+			beforeSend: function(xhrObj){
+				xhrObj.setRequestHeader("Content-Type","multipart/form-data");
+				xhrObj.setRequestHeader("Prediction-key","e6bc197583304f08a26d1594c4941bf6");
+			},
+			type: "POST",
+			data: blob,
+			processData: false,
+			contentType: false
+		})
+		.done(function(data){
+			// 成功時の処理
+			output.innerHTML += "<p>" + JSON.stringify(data);
+			var p = data.predictions[0]['probability'];
+				p *= 1000;
+				q = Math.floor(p);
+				q /= 10;
+			alert(data.predictions[0]['tagName'] + "（" + q + "％）");
+		})
+		.fail(function(e){
+			// 失敗時の処理
+			alert("エラー発生");
+			output.innerHTML += "<p>" + JSON.stringify(e);
+		});
+	});
+});
+</script>
+</body>
+</html>
