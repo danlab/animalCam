@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>あにまるカメラ</title>
+<title>どうぶつカメラ</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 <style>
@@ -12,7 +12,7 @@ canvas{
 </style>
 </head>
 <body>
-<h1>あにまるカメラ</h1>
+<h1>どうぶつカメラ</h1>
 <input id="inputFile" name="file" type="file" accept="image/*">
 <canvas id="photo"></canvas>
 <button id="submit" hidden>送信</button>
@@ -79,7 +79,7 @@ $(function(){
 			// 成功時の処理
 			output.innerHTML += "<p>" + JSON.stringify(data);
 			var p = data.predictions[0]['probability'];
-			if(p > 0.5){
+			if(p > 0){
 				p *= 1000;
 				q = Math.floor(p);
 				q /= 10;
