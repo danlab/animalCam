@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>あにまるカメラ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<style>
+canvas{
+	max-width:100%;
+}
+video{
+	transform: scaleX(+1)
+}
+section{
+	text-align: center;
+}
+</style>
+</head>
+<body>
+<h1>あにまるカメラ</h1>
+<article>
+<section id="splash">
+<p id="errorMessage">準備中</p>
+</section>
+<section id="app" hidden>
+<video id="monitor" autoplay></video><canvas id="photo" hidden></canvas>
+<button id="submit" hidden>&#x1F4F7;</button>
+<p id="answer"></p>
+</section>
+<script>
+var video = document.getElementById('monitor');
+var canvas = document.getElementById('photo');
+
+navigator.mediaDevices.getUserMedia({
+	video: true
+}).then(function(stream){
+	video.srcObject = stream;
+	video.onloadedmetadata = function(){
+		canvas.width = video.videoWidth;
+		canvas.height = video.videoHeight;
+		document.getElementById('splash').hidden = true;
+		document.getElementById('app').hidden = false;
+	};
+}).catch(function (reason) {
+	document.getElementById('errorMessage').textContent = "カメラを使用することができません。";
+});
+
+var output = document.getElementById("answer");
+
+// 送信ボタンが押されたときの処理
+$('#submit').click(check);
+setInterval(check, 3000);
+function check(){
+	var ctx = canvas.getContext('2d');
+	ctx.drawImage(video, 0, 0);
+	var blob = null;
+	// blob形式のデータを作成する（CustomVision送信用）
+	var base64 = canvas.toDataURL('image/jpeg');
+	var bin = atob(base64.split('base64,')[1]);
+	var len = bin.length;
+	var barr = new Uint8Array(len);
+	for(var i = 0; i < len; i++){
+		barr[i] = bin.charCodeAt(i);
+	}
+	// 画像のバイナリデータを作成する
+	blob = new Blob([barr], {type: 'image/jpeg'});
+
+	$.ajax({
+		url: "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/d92e3104-583b-4137-8c63-f9cac2404949/image?iterationId=54dac16d-4d69-403a-bde5-d850a9189f56",
+		beforeSend: function(xhrObj){
+			xhrObj.setRequestHeader("Content-Type","multipart/form-data");
+			xhrObj.setRequestHeader("Prediction-key","e6bc197583304f08a26d1594c4941bf6");
+		},
+		type: "POST",
+		data: blob,	// 画像データの本体を渡す
+		processData: false,
+		contentType: false
+	})
+	.done(function(data){
+		// 成功時の処理
+		var p = data.predictions[0]['probability'];
+		if(p > 0*0.5){
+			p *= 1000;
+			q = Math.floor(p);
+			q /= 10;
+			output.innerHTML = data.predictions[0]['tagName'] + "（確信度：" + q + "％）";
+		}
+	})
+	.fail(function(e){
+		// 失敗時の処理
+		alert("エラー発生");
+		output.innerHTML += "<p>" + JSON.stringify(e);
+	});
+}
+</script>
+</article>
+</body>
+</html>
