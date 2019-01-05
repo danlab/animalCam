@@ -17,7 +17,7 @@ var file = null;
 var blob = null;
 $(function(){
 	// ファイルが選択されたときの処理
-	$('input[type=file]').change(function(){
+	$('#inputFile').change(function(){
 		// 画像ファイル（JPEGまたはPNG）でない場合は，先に進まない。
 		file = $(this).prop('files')[0];
 		if (file.type != 'image/jpeg' && file.type != 'image/png'){
