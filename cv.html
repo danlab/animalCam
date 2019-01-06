@@ -85,7 +85,9 @@ $(function(){
 				q = Math.floor(p + 0.5);
 				q /= 10;
 				alert(data.predictions[0]['tagName'] + "（確信度：" + q + "％）");
-output.innerHTML = 'ツイートでみんなに共有しよう！' + '<button class="js-sharing-popup-twitter" data-share-text="' + data.predictions[0]['tagName'] + "（確信度：" + q + "％）" + '" data-share-url="https://danlab.github.io/animalCam/cv.html" data-share-via="" data-share-hashtags="どうぶつカメラ" data-share-related="">ツイート</button>';
+output.innerHTML = 'ツイートでみんなに共有しよう！' + '<a href="https://twitter.com/share?url=https://danlab.github.io/animalCam/cv.html&text="' + data.predictions[0]['tagName'] + "（確信度：" + q + "％）" + '">ツイート</a>';
+
+'<button class="js-sharing-popup-twitter" data-share-text="' + data.predictions[0]['tagName'] + "（確信度：" + q + "％）" + '" data-share-url="https://danlab.github.io/animalCam/cv.html" data-share-via="" data-share-hashtags="どうぶつカメラ" data-share-related="">ツイート</button>';
 
 			}
 			else{
