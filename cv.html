@@ -85,7 +85,7 @@ $(function(){
 				q = Math.floor(p + 0.5);
 				q /= 10;
 				alert(data.predictions[0]['tagName'] + "（確信度：" + q + "％）");
-output.innerHTML += '<a href="https://twitter.com/share?url=https://danlab.github.io/animalCam/cv.html&text="' + data.predictions[0]['tagName'] + "（確信度：" + q + "％）" + '\n\n#どうぶつカメラ">ツイート</a>';
+output.innerHTML += '<a href="https://twitter.com/share?url=https://danlab.github.io/animalCam/cv.html&text=' + data.predictions[0]['tagName'] + "（確信度：" + q + "％）" + '\n\n#どうぶつカメラ">ツイート</a>';
 
 			}
 			else{
