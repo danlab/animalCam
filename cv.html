@@ -85,7 +85,7 @@ $(function(){
 				q = Math.floor(p + 0.5);
 				q /= 10;
 				alert(data.predictions[0]['tagName'] + "（確信度：" + q + "％）");
-output.innerHTML = 'ツイートでみんなに共有しよう！' + '<a href="https://twitter.com/share?url=https://danlab.github.io/animalCam/cv.html&text="' + data.predictions[0]['tagName'] + "（確信度：" + q + "％）" + '">ツイート</a>';
+				output.innerHTML = 'ツイートでみんなに共有しよう！' + '<a href="https://twitter.com/share?url=https://danlab.github.io/animalCam/cv.html&text=' + ( data.predictions[0]['tagName'] + '（確信度：' + q + '％）%0D%0A%0D%0A%23どうぶつカメラ%0D%0A') + '">ツイート</a>';
 			}
 			else{
 				alert("イヌでもネコでもない，でしょうか。");
