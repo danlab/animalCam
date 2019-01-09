@@ -24,7 +24,7 @@ var blob = null;
 $(function(){
 	// ファイルが選択されたときの処理
 	$('#inputFile').change(function(){
-		// 画像ファイル（JPEGまたはPNG）でない場合は，先に進まない。
+		// 画像ファイル（JPEG/PNG/GIF）でない場合は，先に進まない。
 		file = $(this).prop('files')[0];
 		if (file.type != 'image/jpeg' && file.type != 'image/png' && file.type != 'image/gif'){
 			file = null;
@@ -36,14 +36,15 @@ $(function(){
 		document.getElementById('submit').hidden = false;
 		output.innerHTML = "この写真を送信してください。";
 
+		// 画像ファイルの表示
 		var img = new Image();
 		var reader = new FileReader();
 		reader.onload = function(e){
 			img.onload = function(){
 				// 読み込んだ画像ファイルを画面に表示する
 				var canvas = document.getElementById('photo');
-				canvas.width = 640;
-				canvas.height = 480;
+				//canvas.width = 640;
+				canvas.height = canvas.width * img.height / img.width;
 				var ctx = canvas.getContext('2d');
 				ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
 
