@@ -85,8 +85,15 @@ $(function(){
 				p *= 1000;
 				q = Math.floor(p + 0.5);
 				q /= 10;
-				alert(data.predictions[0]['tagName'] + "（確信度：" + q + "％）");
-				output.innerHTML = 'ツイートでみんなに共有しよう！' + '<a href="https://twitter.com/share?url=https://danlab.github.io/animalCam/cv.html&text=' + ( data.predictions[0]['tagName'] + '（確信度：' + q + '％）%0D%0A%0D%0A%23どうぶつカメラ%0D%0A') + '">ツイート</a>';
+				url = "https://danlab.github.io/animalCam/cv.html";
+				txt = data.predictions[0]['tagName'] + '（確信度：' + q + '％）';
+				alert(txt);
+
+				output.innerHTML = 'みんなに共有しよう！<ul>';
+				output.innerHTML += '<li><a href="https://twitter.com/share?url=' + url + '&text=' + txt + '%0D%0A%0D%0A%23どうぶつカメラ%0D%0A' + '">ツイート</a></li>';
+				output.innerHTML += '<li><a href="http://www.facebook.com/share.php?u=' + url + '&t=' + txt + '" target="_blank" rel="nofollow">Facebook</a></li>';
+				output.innerHTML += '<li><a href="http://line.me/R/msg/text/?' + txt + '%0D%0A' + url + '" target="_blank" rel="nofollow">LINE</a></li>';
+				output.innerHTML += '</ul>';
 			}
 			else{
 				alert("イヌでもネコでもない，でしょうか。");
