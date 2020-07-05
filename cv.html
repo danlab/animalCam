@@ -66,10 +66,10 @@ $(function(){
 	// 送信ボタンが押されたときの処理
 	$('#submit').click(function(){
 		$.ajax({
-			url: "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/d92e3104-583b-4137-8c63-f9cac2404949/image?iterationId=54dac16d-4d69-403a-bde5-d850a9189f56",
+			url: "https://animalcamera.cognitiveservices.azure.com/customvision/v3.0/Prediction/ed340053-a404-4a9e-bb73-dd8d43d2e5da/classify/iterations/Iteration1/image",
 			beforeSend: function(xhrObj){
-				xhrObj.setRequestHeader("Content-Type","multipart/form-data");
-				xhrObj.setRequestHeader("Prediction-key","e6bc197583304f08a26d1594c4941bf6");
+				xhrObj.setRequestHeader("Content-Type","application/octet-stream");
+				xhrObj.setRequestHeader("Prediction-key","8717aee367c14e70af886c3a9d30fba0");
 			},
 			type: "POST",
 			data: blob,
